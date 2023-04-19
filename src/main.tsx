@@ -11,6 +11,8 @@ import { Breadcrumb, Layout, Menu, theme } from "antd";
 
 import "antd/dist/reset.css";
 import "./main.css";
+import { Provider } from "react-redux";
+import { store } from "./core/store";
 
 const { Header, Content, Sider } = Layout;
 
@@ -43,43 +45,45 @@ const items2: MenuProps["items"] = [
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <Layout>
-      <Header className="header">
-        <div className="logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["2"]}
-          items={items1}
-        />
-      </Header>
+    <Provider store={store}>
       <Layout>
-        <Sider width={200}>
+        <Header className="header">
+          <div className="logo" />
           <Menu
-            mode="inline"
-            defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["sub1"]}
-            style={{ height: "100%", borderRight: 0 }}
-            items={items2}
+            theme="dark"
+            mode="horizontal"
+            defaultSelectedKeys={["2"]}
+            items={items1}
           />
-        </Sider>
-        <Layout style={{ padding: "0 24px 24px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
-          <Content
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-            }}
-          >
-            <App />
-          </Content>
+        </Header>
+        <Layout>
+          <Sider width={200}>
+            <Menu
+              mode="inline"
+              defaultSelectedKeys={["1"]}
+              defaultOpenKeys={["sub1"]}
+              style={{ height: "100%", borderRight: 0 }}
+              items={items2}
+            />
+          </Sider>
+          <Layout style={{ padding: "0 24px 24px" }}>
+            <Breadcrumb style={{ margin: "16px 0" }}>
+              <Breadcrumb.Item>Home</Breadcrumb.Item>
+              <Breadcrumb.Item>List</Breadcrumb.Item>
+              <Breadcrumb.Item>App</Breadcrumb.Item>
+            </Breadcrumb>
+            <Content
+              style={{
+                padding: 24,
+                margin: 0,
+                minHeight: 280,
+              }}
+            >
+              <App />
+            </Content>
+          </Layout>
         </Layout>
       </Layout>
-    </Layout>
+    </Provider>
   </React.StrictMode>
 );
