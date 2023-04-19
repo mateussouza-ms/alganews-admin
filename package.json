@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/charts": "^1.4.2",
     "@reduxjs/toolkit": "^1.9.5",
     "antd": "^5.4.2",
     "ms-alganews-sdk": "^1.9.2",
