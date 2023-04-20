@@ -1,11 +1,12 @@
 import { Breadcrumb } from "antd";
+import { NewBreadcrumbProps } from "antd/es/breadcrumb/Breadcrumb";
+
+const breadcrumbItems: NewBreadcrumbProps["items"] = [
+  { title: "Home" },
+  { title: "List" },
+  { title: "App" },
+];
 
 export function DefaultLayoutBreadcrumb() {
-  return (
-    <Breadcrumb style={{ margin: "16px 0" }}>
-      <Breadcrumb.Item>Home</Breadcrumb.Item>
-      <Breadcrumb.Item>List</Breadcrumb.Item>
-      <Breadcrumb.Item>App</Breadcrumb.Item>
-    </Breadcrumb>
-  );
+  return <Breadcrumb style={{ margin: "16px 0" }} items={breadcrumbItems} />;
 }
