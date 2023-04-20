@@ -1,35 +1,76 @@
 import {
-  LaptopOutlined,
-  NotificationOutlined,
+  DiffOutlined,
+  FallOutlined,
+  HomeOutlined,
+  PlusCircleOutlined,
+  RiseOutlined,
+  TableOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Layout, Menu } from "antd";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const { Sider } = Layout;
 
-const items2: MenuProps["items"] = [
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-].map((icon, index) => {
-  const key = String(index + 1);
-
-  return {
-    key: `sub${key}`,
-    icon: React.createElement(icon),
-    label: `subnav ${key}`,
-
-    children: new Array(4).fill(null).map((_, j) => {
-      const subKey = index * 4 + j + 1;
-      return {
-        key: subKey,
-        label: `option${subKey}`,
-      };
-    }),
-  };
-});
+const menuItems: MenuProps["items"] = [
+  {
+    key: "home",
+    label: "Home",
+    icon: <HomeOutlined />,
+  },
+  {
+    key: "users",
+    label: "Usuários",
+    icon: <UserOutlined />,
+    children: [
+      {
+        key: "users_search",
+        label: "Consulta",
+        icon: <TableOutlined />,
+      },
+      {
+        key: "users_register",
+        label: "Cadastro",
+        icon: <PlusCircleOutlined />,
+      },
+    ],
+  },
+  {
+    key: "payments",
+    label: "Pagamentos",
+    icon: <UserOutlined />,
+    children: [
+      {
+        key: "payments_search",
+        label: `Consulta`,
+        icon: <TableOutlined />,
+      },
+      {
+        key: "payments_register",
+        label: `Cadastro`,
+        icon: <PlusCircleOutlined />,
+      },
+    ],
+  },
+  {
+    key: "cashFlow",
+    label: `Fluxo de Caixa`,
+    icon: <DiffOutlined />,
+    children: [
+      {
+        key: "revenue",
+        label: `Receita`,
+        icon: <RiseOutlined />,
+      },
+      {
+        key: "expense",
+        label: `Despesa`,
+        icon: <FallOutlined />,
+      },
+    ],
+  },
+];
 
 export function DefaultLayoutSidebar() {
   const [isBroken, setIsBroken] = useState(false);
@@ -47,7 +88,7 @@ export function DefaultLayoutSidebar() {
         defaultSelectedKeys={["1"]}
         defaultOpenKeys={["sub1"]}
         style={{ height: "100%", borderRight: 0 }}
-        items={items2}
+        items={menuItems}
       />
     </Sider>
   );
