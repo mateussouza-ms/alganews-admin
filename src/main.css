@@ -1,3 +1,25 @@
 #root > section.ant-layout {
   min-height: 100vh;
 }
+
+#PageLayout {
+  margin-top: 64px;
+}
+
+.ant-layout-header {
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+}
+
+.ant-layout-sider.broken {
+  position: fixed !important;
+  overflow: inherit !important;
+  box-shadow: 5px 10px rgba(0, 0, 0, 0.07);
+  z-index: 2;
+  height: 100%;
+}
+
+.ant-layout-sider.broken .ant-layout-sider-children {
+  overflow: hidden auto;
+}

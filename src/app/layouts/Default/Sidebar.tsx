@@ -5,7 +5,7 @@ import {
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Layout, Menu } from "antd";
-import React from "react";
+import React, { useState } from "react";
 
 const { Sider } = Layout;
 
@@ -32,8 +32,16 @@ const items2: MenuProps["items"] = [
 });
 
 export function DefaultLayoutSidebar() {
+  const [isBroken, setIsBroken] = useState(false);
+
   return (
-    <Sider width={200}>
+    <Sider
+      width={200}
+      breakpoint="lg"
+      collapsedWidth="0"
+      onBreakpoint={setIsBroken}
+      className={isBroken ? "broken" : undefined}
+    >
       <Menu
         mode="inline"
         defaultSelectedKeys={["1"]}
