@@ -9,7 +9,7 @@ export function HomeView() {
     <Space direction="vertical" size={"small"} style={{ maxWidth: "100%" }}>
       <Row>
         <Col span={24}>
-          <Title level={2}>Olá Mateus Souza</Title>
+          <Title level={2}>Olá, Mateus Souza</Title>
           <Paragraph>
             Esse é o resumo da empresa nos últimos doze meses
           </Paragraph>
