@@ -10,7 +10,7 @@ import {
 import type { MenuProps } from "antd";
 import { Layout, Menu } from "antd";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const { Sider } = Layout;
 
@@ -22,7 +22,7 @@ export function DefaultLayoutSidebar() {
   const menuItems: MenuProps["items"] = [
     {
       key: "/",
-      label: "Home",
+      label: <Link to="/">Home</Link>,
       icon: <HomeOutlined />,
       onClick: () => navigate("/"),
     },
@@ -33,13 +33,13 @@ export function DefaultLayoutSidebar() {
       children: [
         {
           key: "/usuarios",
-          label: "Consulta",
+          label: <Link to="/usuarios">Consulta</Link>,
           icon: <TableOutlined />,
           onClick: () => navigate("/usuarios"),
         },
         {
           key: "/usuarios/cadastro",
-          label: "Cadastro",
+          label: <Link to="/usuarios/cadastro">Cadastro</Link>,
           icon: <PlusCircleOutlined />,
           onClick: () => navigate("/usuarios/cadastro"),
         },
@@ -52,13 +52,13 @@ export function DefaultLayoutSidebar() {
       children: [
         {
           key: "/pagamentos",
-          label: `Consulta`,
+          label: <Link to="/pagamentos">Consulta</Link>,
           icon: <TableOutlined />,
           onClick: () => navigate("/pagamentos"),
         },
         {
           key: "/pagamentos/cadastro",
-          label: `Cadastro`,
+          label: <Link to="/pagamentos/cadastro">Cadastro</Link>,
           icon: <PlusCircleOutlined />,
           onClick: () => navigate("/pagamentos/cadastro"),
         },
@@ -71,13 +71,13 @@ export function DefaultLayoutSidebar() {
       children: [
         {
           key: "/fluxo-de-caixa/receitas",
-          label: `Receita`,
+          label: <Link to="/fluxo-de-caixa/receitas">Receita</Link>,
           icon: <RiseOutlined />,
           onClick: () => navigate("/fluxo-de-caixa/receitas"),
         },
         {
           key: "/fluxo-de-caixa/despesas",
-          label: `Despesa`,
+          label: <Link to="/fluxo-de-caixa/despesas">Despesa</Link>,
           icon: <FallOutlined />,
           onClick: () => navigate("/fluxo-de-caixa/despesas"),
         },
