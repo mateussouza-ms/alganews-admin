@@ -10,7 +10,7 @@ import {
 import type { MenuProps } from "antd";
 import { Layout, Menu } from "antd";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const { Sider } = Layout;
 
@@ -18,6 +18,7 @@ export function DefaultLayoutSidebar() {
   const [isBroken, setIsBroken] = useState(false);
 
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const menuItems: MenuProps["items"] = [
     {
@@ -27,7 +28,7 @@ export function DefaultLayoutSidebar() {
       onClick: () => navigate("/"),
     },
     {
-      key: "users",
+      key: "usuarios",
       label: "Usuários",
       icon: <UserOutlined />,
       children: [
@@ -46,7 +47,7 @@ export function DefaultLayoutSidebar() {
       ],
     },
     {
-      key: "payments",
+      key: "pagamentos",
       label: "Pagamentos",
       icon: <UserOutlined />,
       children: [
@@ -65,7 +66,7 @@ export function DefaultLayoutSidebar() {
       ],
     },
     {
-      key: "cashFlow",
+      key: "fluxo-de-caixa",
       label: `Fluxo de Caixa`,
       icon: <DiffOutlined />,
       children: [
@@ -95,8 +96,8 @@ export function DefaultLayoutSidebar() {
     >
       <Menu
         mode="inline"
-        defaultSelectedKeys={["1"]}
-        defaultOpenKeys={["sub1"]}
+        defaultSelectedKeys={[pathname]}
+        defaultOpenKeys={[pathname.split("/")[1]]}
         style={{ height: "100%", borderRight: 0 }}
         items={menuItems}
       />
