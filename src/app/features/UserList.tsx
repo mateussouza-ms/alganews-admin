@@ -23,7 +23,7 @@ const userRoles = {
 type UserRoles = keyof typeof userRoles;
 
 export function UserList() {
-  const { users, fetchUsers } = useUsers();
+  const { users, fetchUsers, toggleUserStatus } = useUsers();
 
   useEffect(() => {
     fetchUsers();
@@ -33,6 +33,7 @@ export function UserList() {
     <>
       <Table<User.Summary>
         dataSource={users}
+        rowKey={"id"}
         columns={[
           {
             dataIndex: "name",
@@ -70,7 +71,12 @@ export function UserList() {
             dataIndex: "active",
             title: "Ativo",
             align: "center",
-            render: (value: boolean) => <Switch defaultChecked={value} />,
+            render: (value: boolean, user) => (
+              <Switch
+                defaultChecked={value}
+                onChange={() => toggleUserStatus(user)}
+              />
+            ),
           },
           {
             dataIndex: "id",
