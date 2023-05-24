@@ -34,7 +34,7 @@ const userRoles = {
 type UserRoles = keyof typeof userRoles;
 
 export function UserList() {
-  const { users, fetchUsers, toggleUserStatus } = useUsers();
+  const { users, fetchUsers, toggleUserStatus, fetching } = useUsers();
 
   function getColumnSearchProps(
     dataIndex: keyof User.Summary,
@@ -97,6 +97,7 @@ export function UserList() {
       <Table<User.Summary>
         dataSource={users}
         rowKey={"id"}
+        loading={fetching}
         columns={[
           {
             dataIndex: "name",
