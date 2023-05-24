@@ -1,5 +1,16 @@
-import { EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Avatar, Button, Space, Switch, Table, Tag, Typography } from "antd";
+import { EditOutlined, EyeOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  Avatar,
+  Button,
+  Card,
+  Input,
+  Space,
+  Switch,
+  Table,
+  Tag,
+  Typography,
+} from "antd";
+import { ColumnProps } from "antd/es/table";
 import { format } from "date-fns";
 import { User } from "ms-alganews-sdk";
 import { useEffect } from "react";
@@ -25,6 +36,58 @@ type UserRoles = keyof typeof userRoles;
 export function UserList() {
   const { users, fetchUsers, toggleUserStatus } = useUsers();
 
+  function getColumnSearchProps(
+    dataIndex: keyof User.Summary,
+    displayName?: string
+  ): ColumnProps<User.Summary> {
+    return {
+      filterDropdown: ({
+        selectedKeys,
+        setSelectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <Card>
+          <Input
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={() => confirm()}
+            placeholder={`Buscar ${displayName || dataIndex}`}
+            style={{ marginBottom: 8, display: "block" }}
+          />
+          <Space>
+            <Button
+              type="primary"
+              size="small"
+              style={{ width: 90 }}
+              onClick={() => confirm()}
+              icon={<SearchOutlined />}
+            >
+              Buscar
+            </Button>
+            <Button size="small" style={{ width: 90 }} onClick={clearFilters}>
+              Limpar
+            </Button>
+          </Space>
+        </Card>
+      ),
+      onFilter: (value, record) => {
+        if (!record[dataIndex]) return false;
+
+        return record[dataIndex]
+          .toString()
+          .toLocaleLowerCase()
+          .includes(String(value).toLocaleLowerCase());
+      },
+
+      filterIcon: (filtered: boolean) => (
+        <SearchOutlined style={{ color: filtered ? "#09f" : undefined }} />
+      ),
+    };
+  }
+
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
@@ -47,12 +110,14 @@ export function UserList() {
                 </Typography.Text>
               </Space>
             ),
+            ...getColumnSearchProps("name", "Nome"),
           },
           {
             dataIndex: "email",
             title: "E-mail",
             ellipsis: true,
             width: 160,
+            ...getColumnSearchProps("email", "E-mail"),
           },
           {
             dataIndex: "role",
