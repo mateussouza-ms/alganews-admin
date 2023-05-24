@@ -93,6 +93,7 @@ export function DefaultLayoutSidebar() {
       collapsedWidth="0"
       onBreakpoint={setIsBroken}
       className={isBroken ? "broken" : undefined}
+      style={{ zIndex: 3 }}
     >
       <Menu
         mode="inline"
