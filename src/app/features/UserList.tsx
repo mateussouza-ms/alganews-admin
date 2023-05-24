@@ -3,6 +3,7 @@ import {
   Avatar,
   Button,
   Card,
+  Descriptions,
   Input,
   Space,
   Switch,
@@ -101,17 +102,49 @@ export function UserList() {
         pagination={false}
         columns={[
           {
+            title: "Usuários",
+            responsive: ["xs"],
+            render: (user: User.Summary) => (
+              <Descriptions column={1} size="small">
+                <Descriptions.Item label="Nome">{user.name}</Descriptions.Item>
+
+                <Descriptions.Item label="E-mail">
+                  {user.email}
+                </Descriptions.Item>
+
+                <Descriptions.Item label="Criação">
+                  {format(new Date(user.createdAt), "dd/MM/yyyy")}
+                </Descriptions.Item>
+
+                <Descriptions.Item label="Perfil">
+                  <Tag color={userRoles[user.role].color}>
+                    {userRoles[user.role].label}
+                  </Tag>
+                </Descriptions.Item>
+
+                <Descriptions.Item label="Ações">
+                  <Button icon={<EyeOutlined />} size="small" />
+                  <Button icon={<EditOutlined />} size="small" />
+                </Descriptions.Item>
+              </Descriptions>
+            ),
+          },
+          {
+            dataIndex: "avatarUrls",
+            title: "",
+            width: 48,
+            fixed: "left",
+            responsive: ["sm"],
+            render: (value: User.Summary["avatarUrls"]) => (
+              <Avatar size={"small"} src={value.small} />
+            ),
+          },
+          {
             dataIndex: "name",
             title: "Nome",
             width: 160,
-            render: (value: string, row) => (
-              <Space>
-                <Avatar size={"small"} src={row.avatarUrls.small} />
-                <Typography.Text ellipsis style={{ maxWidth: 120 }}>
-                  {value}
-                </Typography.Text>
-              </Space>
-            ),
+            ellipsis: true,
+            responsive: ["sm"],
             ...getColumnSearchProps("name", "Nome"),
           },
           {
@@ -119,12 +152,15 @@ export function UserList() {
             title: "E-mail",
             ellipsis: true,
             width: 160,
+            responsive: ["sm"],
             ...getColumnSearchProps("email", "E-mail"),
           },
           {
             dataIndex: "role",
             title: "Perfil",
             align: "center",
+            width: 100,
+            responsive: ["sm"],
             render: (value: UserRoles) => (
               <Tag color={userRoles[value].color}>{userRoles[value].label}</Tag>
             ),
@@ -132,12 +168,16 @@ export function UserList() {
           {
             dataIndex: "createdAt",
             title: "Data de criação",
+            width: 120,
+            responsive: ["sm"],
             render: (value: string) => format(new Date(value), "dd/MM/yyyy"),
           },
           {
             dataIndex: "active",
             title: "Ativo",
             align: "center",
+            width: 100,
+            responsive: ["sm"],
             render: (value: boolean, user) => (
               <Switch
                 defaultChecked={value}
@@ -149,7 +189,8 @@ export function UserList() {
             dataIndex: "id",
             title: "Ações",
             align: "center",
-
+            width: 100,
+            responsive: ["sm"],
             render: (id: number) => (
               <>
                 <Button icon={<EyeOutlined />} size="small" />

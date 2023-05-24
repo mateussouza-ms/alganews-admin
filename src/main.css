@@ -35,3 +35,9 @@ body {
 .ant-layout-sider.broken .ant-layout-sider-children {
   overflow: hidden auto;
 }
+
+@media screen and (max-width: 1190px) {
+  .ant-table-content {
+    overflow: auto;
+  }
+}
