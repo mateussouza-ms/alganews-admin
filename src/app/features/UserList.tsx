@@ -98,6 +98,7 @@ export function UserList() {
         dataSource={users}
         rowKey={"id"}
         loading={fetching}
+        pagination={false}
         columns={[
           {
             dataIndex: "name",
