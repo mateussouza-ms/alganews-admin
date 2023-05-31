@@ -16,6 +16,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { UserOutlined } from "@ant-design/icons";
 import ImageCrop from "antd-img-crop";
+import { MaskedInput } from "antd-mask-input";
 import locale from "antd/es/date-picker/locale/pt_BR";
 import { FileService, User, UserService } from "ms-alganews-sdk";
 import { CustomError } from "ms-alganews-sdk/dist/CustomError";
@@ -44,13 +45,20 @@ export function UserForm() {
 
   const handleSubmit = useCallback(
     async (user: User.Input) => {
+      const userDTO: User.Input = {
+        ...user,
+        phone: user.phone.replace(/\D/g, ""),
+        taxpayerId: user.taxpayerId.replace(/\D/g, ""),
+      };
+
       try {
-        await UserService.insertNewUser(user);
+        await UserService.insertNewUser(userDTO);
         notification.success({
           message: "Sucesso",
           description: "Usuário salvo com sucesso!",
         });
       } catch (error) {
+        console.log("error:", error);
         if (error instanceof CustomError) {
           if (error.data?.objects) {
             form.setFields(
@@ -68,6 +76,16 @@ export function UserForm() {
                 };
               })
             );
+          } else {
+            notification.error({
+              message: error.message,
+              description:
+                error.data?.detail === error.message
+                  ? null
+                  : error.data?.detail === "Network Error"
+                  ? "Erro de conexão"
+                  : error.data?.detail,
+            });
           }
         } else {
           notification.error({
@@ -86,6 +104,7 @@ export function UserForm() {
   return (
     <Form
       layout="vertical"
+      autoComplete="off"
       onFinish={handleSubmit}
       form={form}
       onFinishFailed={(fields) => {
@@ -296,7 +315,10 @@ export function UserForm() {
                           },
                         ]}
                       >
-                        <Input placeholder="(61) 99999-9999" />
+                        <MaskedInput
+                          mask="(00) 00000-0000"
+                          placeholder="(61) 99999-9999"
+                        />
                       </Form.Item>
                     </Col>
                     <Col lg={8}>
@@ -311,7 +333,10 @@ export function UserForm() {
                           },
                         ]}
                       >
-                        <Input placeholder="111.222.333-44" />
+                        <MaskedInput
+                          mask={"000.000.000-00"}
+                          placeholder="111.222.333-44"
+                        />
                       </Form.Item>
                     </Col>
                     <Col lg={8}>
@@ -400,12 +425,12 @@ export function UserForm() {
                         rules={[
                           { required: true, message: "Campo obrigatório" },
                           {
-                            max: 1,
-                            message: "O tamanho máximo é de ${max} caracteres",
+                            min: 1,
+                            message: "O tamanho mínimo é de ${min} caracteres",
                           },
                           {
-                            min: 10,
-                            message: "O tamanho mínimo é de ${min} caracteres",
+                            max: 10,
+                            message: "O tamanho máximo é de ${max} caracteres",
                           },
                         ]}
                       >
@@ -419,12 +444,12 @@ export function UserForm() {
                         rules={[
                           { required: true, message: "Campo obrigatório" },
                           {
-                            max: 1,
-                            message: "O tamanho máximo é de ${max} caracteres",
+                            min: 1,
+                            message: "O tamanho mínimo é de ${min} caracteres",
                           },
                           {
-                            min: 20,
-                            message: "O tamanho mínimo é de ${min} caracteres",
+                            max: 20,
+                            message: "O tamanho máximo é de ${max} caracteres",
                           },
                         ]}
                       >
@@ -439,12 +464,12 @@ export function UserForm() {
                         rules={[
                           { required: true, message: "Campo obrigatório" },
                           {
-                            max: 1,
-                            message: "O tamanho máximo é de ${max} caracteres",
-                          },
-                          {
                             min: 1,
                             message: "O tamanho mínimo é de ${min} caracteres",
+                          },
+                          {
+                            max: 1,
+                            message: "O tamanho máximo é de ${max} caracteres",
                           },
                         ]}
                       >

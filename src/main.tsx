@@ -33,21 +33,27 @@ const theme: ThemeConfig = {
     },
     Popover: {
       colorBgBase: "#f3f8fa",
+      colorBgContainer: "#f3f8fa",
     },
     Table: {
       colorBgBase: "#f3f8fa",
+      colorBgContainer: "#f3f8fa",
     },
     Input: {
       colorBgBase: "#ffffff",
+      colorBgContainer: "#ffffff",
     },
     Select: {
       colorBgBase: "#ffffff",
+      colorBgContainer: "#ffffff",
     },
     DatePicker: {
       colorBgBase: "#ffffff",
+      colorBgContainer: "#ffffff",
     },
     Calendar: {
       colorBgBase: "#ffffff",
+      colorBgContainer: "#ffffff",
     },
   },
 };
