@@ -20,6 +20,12 @@ import locale from "antd/es/date-picker/locale/pt_BR";
 import { FileService, User, UserService } from "ms-alganews-sdk";
 import { CustomError } from "ms-alganews-sdk/dist/CustomError";
 
+const profiles = {
+  EDITOR: "Editor",
+  ASSISTANT: "Assistente",
+  MANGER: "Gerente",
+};
+
 export function UserForm() {
   const [avatar, setAvatar] = useState("");
   const [activeTab, setActiveTab] = useState<"personalData" | "bankAccount">(
@@ -48,10 +54,19 @@ export function UserForm() {
         if (error instanceof CustomError) {
           if (error.data?.objects) {
             form.setFields(
-              error.data.objects.map((err) => ({
-                name: (err.name || "").split("."),
-                errors: [err.userMessage],
-              }))
+              error.data.objects.map((err) => {
+                const name = (err.name || "")
+                  .split(/(\.|\[|\])/gi)
+                  .filter((value) => ![".", "[", "]", ""].includes(value))
+                  .map((value) =>
+                    isNaN(Number(value)) ? value : Number(value)
+                  );
+
+                return {
+                  name,
+                  errors: [err.userMessage],
+                };
+              })
             );
           }
         } else {
@@ -123,13 +138,22 @@ export function UserForm() {
               />
             </Upload>
           </ImageCrop>
-          <Form.Item name={"avatarUrl"} hidden />
+          <Form.Item
+            name={"avatarUrl"}
+            hidden
+            rules={[{ type: "url", message: "Deve ser uma URL válida" }]}
+          >
+            <Input hidden />
+          </Form.Item>
         </Col>
         <Col lg={10}>
           <Form.Item
             label="Nome"
             name={"name"}
-            rules={[{ required: true, message: "Campo obrigatório" }]}
+            rules={[
+              { required: true, message: "Campo obrigatório" },
+              { max: 255, message: "O tamanho máximo é de ${max} caracteres" },
+            ]}
           >
             <Input placeholder="Ex.: João Silva" />
           </Form.Item>
@@ -149,7 +173,10 @@ export function UserForm() {
           <Form.Item
             label="Bio"
             name={"bio"}
-            rules={[{ required: true, message: "Campo obrigatório" }]}
+            rules={[
+              { required: true, message: "Campo obrigatório" },
+              { max: 255, message: "O tamanho máximo é de ${max} caracteres" },
+            ]}
           >
             <Input.TextArea rows={5} />
           </Form.Item>
@@ -162,15 +189,23 @@ export function UserForm() {
           <Form.Item
             label="Perfil"
             name={"role"}
-            rules={[{ required: true, message: "Campo obrigatório" }]}
+            rules={[
+              { required: true, message: "Campo obrigatório" },
+              {
+                type: "enum",
+                enum: Object.keys(profiles),
+                message:
+                  "${label} precisa ser " +
+                  Object.values(profiles).toString().replaceAll(",", ", "),
+              },
+            ]}
           >
             <Select
               placeholder="Selecione um perfil"
-              options={[
-                { value: "EDITOR", label: "Editor" },
-                { value: "ASSISTANT", label: "Assistente" },
-                { value: "MANGER", label: "Gerente" },
-              ]}
+              options={Object.entries(profiles).map(([value, label]) => ({
+                value,
+                label,
+              }))}
             />
           </Form.Item>
         </Col>
@@ -178,7 +213,10 @@ export function UserForm() {
           <Form.Item
             label="E-mail"
             name={"email"}
-            rules={[{ required: true, message: "Campo obrigatório" }]}
+            rules={[
+              { required: true, message: "Campo obrigatório" },
+              { max: 255, message: "O tamanho máximo é de ${max} caracteres" },
+            ]}
           >
             <Input type="email" placeholder="Ex.: contato@joaosilva.com " />
           </Form.Item>
@@ -206,6 +244,10 @@ export function UserForm() {
                         name={["location", "country"]}
                         rules={[
                           { required: true, message: "Campo obrigatório" },
+                          {
+                            max: 50,
+                            message: "O tamanho máximo é de ${max} caracteres",
+                          },
                         ]}
                       >
                         <Input placeholder="Ex.: Brasil" />
@@ -217,6 +259,10 @@ export function UserForm() {
                         name={["location", "state"]}
                         rules={[
                           { required: true, message: "Campo obrigatório" },
+                          {
+                            max: 50,
+                            message: "O tamanho máximo é de ${max} caracteres",
+                          },
                         ]}
                       >
                         <Input placeholder="Ex.: Goiás" />
@@ -228,6 +274,10 @@ export function UserForm() {
                         name={["location", "city"]}
                         rules={[
                           { required: true, message: "Campo obrigatório" },
+                          {
+                            max: 255,
+                            message: "O tamanho máximo é de ${max} caracteres",
+                          },
                         ]}
                       >
                         <Input placeholder="Ex.: Luziânia" />
@@ -240,6 +290,10 @@ export function UserForm() {
                         name={"phone"}
                         rules={[
                           { required: true, message: "Campo obrigatório" },
+                          {
+                            max: 20,
+                            message: "O tamanho máximo é de ${max} caracteres",
+                          },
                         ]}
                       >
                         <Input placeholder="(61) 99999-9999" />
@@ -251,6 +305,10 @@ export function UserForm() {
                         name={"taxpayerId"}
                         rules={[
                           { required: true, message: "Campo obrigatório" },
+                          {
+                            max: 14,
+                            message: "O tamanho máximo é de ${max} caracteres",
+                          },
                         ]}
                       >
                         <Input placeholder="111.222.333-44" />
@@ -285,7 +343,22 @@ export function UserForm() {
                           <Form.Item
                             label="%"
                             name={["skills", index, "percentage"]}
-                            rules={[{ required: true, message: "  " }]}
+                            rules={[
+                              { required: true, message: "" },
+                              {
+                                validator: async (field, value) => {
+                                  if (isNaN(Number(value))) {
+                                    throw "Somente números";
+                                  }
+                                  if (Number(value) > 100) {
+                                    throw "Máximo é 100";
+                                  }
+                                  if (Number(value) < 0) {
+                                    throw "Mínimo é 0";
+                                  }
+                                },
+                              },
+                            ]}
                           >
                             <Input />
                           </Form.Item>
@@ -307,6 +380,14 @@ export function UserForm() {
                         name={["bankAccount", "bankCode"]}
                         rules={[
                           { required: true, message: "Campo obrigatório" },
+                          {
+                            max: 3,
+                            message: "O tamanho máximo é de ${max} caracteres",
+                          },
+                          {
+                            min: 3,
+                            message: "O tamanho mínimo é de ${min} caracteres",
+                          },
                         ]}
                       >
                         <Input placeholder="260" />
@@ -318,6 +399,14 @@ export function UserForm() {
                         name={["bankAccount", "agency"]}
                         rules={[
                           { required: true, message: "Campo obrigatório" },
+                          {
+                            max: 1,
+                            message: "O tamanho máximo é de ${max} caracteres",
+                          },
+                          {
+                            min: 10,
+                            message: "O tamanho mínimo é de ${min} caracteres",
+                          },
                         ]}
                       >
                         <Input placeholder="0001" />
@@ -329,6 +418,14 @@ export function UserForm() {
                         name={["bankAccount", "number"]}
                         rules={[
                           { required: true, message: "Campo obrigatório" },
+                          {
+                            max: 1,
+                            message: "O tamanho máximo é de ${max} caracteres",
+                          },
+                          {
+                            min: 20,
+                            message: "O tamanho mínimo é de ${min} caracteres",
+                          },
                         ]}
                       >
                         <Input placeholder="123456" />
@@ -341,6 +438,14 @@ export function UserForm() {
                         name={["bankAccount", "digit"]}
                         rules={[
                           { required: true, message: "Campo obrigatório" },
+                          {
+                            max: 1,
+                            message: "O tamanho máximo é de ${max} caracteres",
+                          },
+                          {
+                            min: 1,
+                            message: "O tamanho mínimo é de ${min} caracteres",
+                          },
                         ]}
                       >
                         <Input placeholder="1" />
