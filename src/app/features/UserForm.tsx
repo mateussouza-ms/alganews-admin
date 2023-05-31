@@ -58,7 +58,6 @@ export function UserForm() {
           description: "Usuário salvo com sucesso!",
         });
       } catch (error) {
-        console.log("error:", error);
         if (error instanceof CustomError) {
           if (error.data?.objects) {
             form.setFields(
