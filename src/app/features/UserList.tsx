@@ -9,7 +9,6 @@ import {
   Switch,
   Table,
   Tag,
-  Typography,
 } from "antd";
 import { ColumnProps } from "antd/es/table";
 import { format } from "date-fns";

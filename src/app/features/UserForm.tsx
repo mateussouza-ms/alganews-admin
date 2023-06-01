@@ -372,13 +372,13 @@ export function UserForm() {
                               {
                                 validator: async (field, value) => {
                                   if (isNaN(Number(value))) {
-                                    throw "Somente números";
+                                    throw new Error("Somente números");
                                   }
                                   if (Number(value) > 100) {
-                                    throw "Máximo é 100";
+                                    throw new Error("Máximo é 100");
                                   }
                                   if (Number(value) < 0) {
-                                    throw "Mínimo é 0";
+                                    throw new Error("Mínimo é 0");
                                   }
                                 },
                               },
