@@ -160,6 +160,11 @@ export function UserList() {
             align: "center",
             width: 100,
             responsive: ["sm"],
+            sorter: (a, b) => {
+              return userRoles[a.role].label.localeCompare(
+                userRoles[b.role].label
+              );
+            },
             render: (value: UserRoles) => (
               <Tag color={userRoles[value].color}>{userRoles[value].label}</Tag>
             ),
@@ -169,6 +174,9 @@ export function UserList() {
             title: "Data de criação",
             width: 120,
             responsive: ["sm"],
+            sorter: (a, b) => {
+              return new Date(a.createdAt) > new Date(b.createdAt) ? 1 : -1;
+            },
             render: (value: string) => format(new Date(value), "dd/MM/yyyy"),
           },
           {
