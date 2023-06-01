@@ -178,10 +178,7 @@ export function UserList() {
             width: 100,
             responsive: ["sm"],
             render: (value: boolean, user) => (
-              <Switch
-                defaultChecked={value}
-                onChange={() => toggleUserStatus(user)}
-              />
+              <Switch checked={value} onChange={() => toggleUserStatus(user)} />
             ),
           },
           {
